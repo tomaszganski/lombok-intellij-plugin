@@ -17,15 +17,15 @@ public class LombokConfigPropertyImpl extends ASTWrapperPsiElement implements Lo
     super(node);
   }
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof LombokConfigVisitor) ((LombokConfigVisitor)visitor).visitProperty(this);
-    else super.accept(visitor);
-  }
-
   @Override
   @NotNull
   public LombokConfigOperation getOperation() {
     return findNotNullChildByClass(LombokConfigOperation.class);
+  }
+
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof LombokConfigVisitor) ((LombokConfigVisitor)visitor).visitProperty(this);
+    else super.accept(visitor);
   }
 
   public String getKey() {
