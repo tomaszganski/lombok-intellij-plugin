@@ -1,6 +1,6 @@
 {
   parserClass="de.plushnikov.intellij.plugin.language.parser.LombokConfigParser"
-
+  stubParserClass="de.plushnikov.intellij.plugin.language.psi.GeneratedParserUtilBase"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="LombokConfig"

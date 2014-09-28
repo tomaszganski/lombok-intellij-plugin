@@ -7,7 +7,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import com.intellij.openapi.diagnostic.Logger;
 import static de.plushnikov.intellij.plugin.language.psi.LombokConfigTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static de.plushnikov.intellij.plugin.language.psi.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -34,9 +34,10 @@ public class LombokConfigParser implements PsiParser {
     }
     else {
       Marker marker_ = builder_.mark();
-      enterErrorRecordingSection(builder_, level_, _SECTION_RECOVER_, null);
       result_ = parse_root_(root_, builder_, level_);
-      exitErrorRecordingSection(builder_, level_, result_, true, _SECTION_RECOVER_, TOKEN_ADVANCER);
+      while (builder_.getTokenType() != null) {
+        builder_.advanceLexer();
+      }
       marker_.done(root_);
     }
     return builder_.getTreeBuilt();
@@ -47,9 +48,15 @@ public class LombokConfigParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // CLEAR KEY
+  // (CLEAR KEY)
   public static boolean cleaner(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "cleaner")) return false;
+    return cleaner_0(builder_, level_ + 1);
+  }
+
+  // CLEAR KEY
+  private static boolean cleaner_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "cleaner_0")) return false;
     if (!nextTokenIs(builder_, CLEAR)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
@@ -64,9 +71,15 @@ public class LombokConfigParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // property|cleaner|COMMENT|CRLF
+  // (property|cleaner|COMMENT|CRLF)
   static boolean item_(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "item_")) return false;
+    return item__0(builder_, level_ + 1);
+  }
+
+  // property|cleaner|COMMENT|CRLF
+  private static boolean item__0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "item__0")) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
     result_ = property(builder_, level_ + 1);
@@ -111,9 +124,15 @@ public class LombokConfigParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // KEY operation VALUE
+  // (KEY operation VALUE)
   public static boolean property(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "property")) return false;
+    return property_0(builder_, level_ + 1);
+  }
+
+  // KEY operation VALUE
+  private static boolean property_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "property_0")) return false;
     if (!nextTokenIs(builder_, KEY)) return false;
     boolean result_ = false;
     Marker marker_ = builder_.mark();
