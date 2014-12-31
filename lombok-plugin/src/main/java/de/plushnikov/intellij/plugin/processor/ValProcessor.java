@@ -1,6 +1,5 @@
 package de.plushnikov.intellij.plugin.processor;
 
-import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDiamondType;
@@ -14,7 +13,6 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReferenceParameterList;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeElement;
-import com.intellij.psi.PsiVariable;
 import com.intellij.psi.util.TypeConversionUtil;
 import de.plushnikov.intellij.plugin.problem.LombokProblem;
 import lombok.val;

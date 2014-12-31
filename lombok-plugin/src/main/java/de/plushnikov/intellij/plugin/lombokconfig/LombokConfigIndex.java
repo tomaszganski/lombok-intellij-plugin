@@ -1,12 +1,12 @@
 package de.plushnikov.intellij.plugin.lombokconfig;
 
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiPackage;
 import com.intellij.util.indexing.DataIndexer;
-import com.intellij.util.indexing.DefaultFileTypeSpecificInputFilter;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.intellij.util.indexing.FileBasedIndexExtension;
 import com.intellij.util.indexing.FileContent;
@@ -98,7 +98,12 @@ public class LombokConfigIndex extends FileBasedIndexExtension<ConfigIndexKey, S
   @NotNull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
-    return new DefaultFileTypeSpecificInputFilter(LombokConfigFileType.INSTANCE);
+    return new FileBasedIndex.InputFilter() {
+      @Override
+      public boolean acceptInput(VirtualFile file) {
+        return LombokConfigFileType.INSTANCE.equals(file.getFileType());
+      }
+    };
   }
 
   @Override
