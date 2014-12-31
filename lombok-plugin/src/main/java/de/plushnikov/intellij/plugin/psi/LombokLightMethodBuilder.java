@@ -1,7 +1,7 @@
 package de.plushnikov.intellij.plugin.psi;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.fileTypes.StdFileTypes;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.JavaPsiFacade;

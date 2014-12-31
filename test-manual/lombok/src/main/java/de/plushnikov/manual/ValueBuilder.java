@@ -3,8 +3,6 @@ package de.plushnikov.manual;
 import lombok.Value;
 import lombok.experimental.Builder;
 
-import java.util.Arrays;
-
 @Value
 @Builder
 public class ValueBuilder {
