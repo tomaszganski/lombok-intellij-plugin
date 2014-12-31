@@ -1,6 +1,7 @@
 package de.plushnikov.intellij.plugin.processor.handler;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
@@ -68,7 +69,7 @@ public class BuilderHandler {
   }
 
   protected boolean validateBuilderClassName(@NotNull String builderClassName, @NotNull Project project, @NotNull ProblemBuilder builder) {
-    final PsiNameHelper psiNameHelper = PsiNameHelper.getInstance(project);
+    final PsiNameHelper psiNameHelper = JavaPsiFacade.getInstance(project).getNameHelper();
     if (!psiNameHelper.isIdentifier(builderClassName)) {
       builder.addError("%s ist not a valid identifier", builderClassName);
       return false;
