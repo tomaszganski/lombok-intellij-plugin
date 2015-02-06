@@ -95,11 +95,6 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
     }
   }
 
-//  @Nullable
-//  protected PsiType inferType(PsiTypeElement typeElement) {
-//    return new ValProcessor().inferType(typeElement);
-//  }
-
   private void initRegisteredAnnotations() {
     if (null == registeredAnnotationNames) {
       final Collection<String> nameSet = new HashSet<String>();
