@@ -1,34 +1,27 @@
 package de.plushnikov.intellij.plugin.handler;
 
 import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.CustomExceptionHandler;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.search.GlobalSearchScope;
 import de.plushnikov.intellij.plugin.util.PsiAnnotationUtil;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class SneakyThrowsExceptionHandler extends CustomExceptionHandler {
-  private static final String ANNOTATION_FQN = SneakyThrows.class.getName();
+public class SneakyThrowsExceptionHandler {
 
+  private static final String ANNOTATION_FQN = SneakyThrows.class.getName();
   private static final String JAVA_LANG_THROWABLE = "java.lang.Throwable";
 
-  @Override
-  public boolean isHandled(@Nullable PsiElement element, @NotNull PsiClassType exceptionType, PsiElement topElement) {
-    final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    return psiMethod != null && isExceptionHandled(psiMethod, exceptionType);
-  }
-
-  public static boolean isExceptionHandled(@NotNull PsiModifierListOwner psiModifierListOwner, PsiClassType exceptionClassType) {
+  public static boolean isExceptionHandled(@NotNull PsiModifierListOwner psiModifierListOwner, String... exceptionFQNs) {
     final PsiAnnotation psiAnnotation = AnnotationUtil.findAnnotation(psiModifierListOwner, ANNOTATION_FQN);
     if (psiAnnotation == null) {
       return false;
@@ -40,17 +33,25 @@ public class SneakyThrowsExceptionHandler extends CustomExceptionHandler {
       return true;
     }
 
-    return isExceptionHandled(exceptionClassType, sneakedExceptionTypes);
+    for (String exceptionFQN : exceptionFQNs) {
+      if (!isExceptionHandled(exceptionFQN.trim(), psiModifierListOwner, sneakedExceptionTypes)) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  private static boolean isExceptionHandled(@NotNull PsiClassType exceptionClassType, @NotNull Collection<PsiType> sneakedExceptionTypes) {
+  private static boolean isExceptionHandled(@NotNull String exceptionFQN, @NotNull PsiModifierListOwner psiModifierListOwner, @NotNull Collection<PsiType> sneakedExceptionTypes) {
     for (PsiType sneakedExceptionType : sneakedExceptionTypes) {
-      if (sneakedExceptionType.equalsToText(JAVA_LANG_THROWABLE) || sneakedExceptionType.equals(exceptionClassType)) {
+      if (sneakedExceptionType.equalsToText(JAVA_LANG_THROWABLE) || sneakedExceptionType.equalsToText(exceptionFQN)) {
         return true;
       }
     }
 
-    final PsiClass unhandledExceptionClass = exceptionClassType.resolve();
+    final Project project = psiModifierListOwner.getProject();
+    final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    final PsiClassType unhandledExceptionType = factory.createTypeByFQClassName(exceptionFQN, GlobalSearchScope.allScope(project));
+    final PsiClass unhandledExceptionClass = unhandledExceptionType.resolve();
 
     if (null != unhandledExceptionClass) {
       for (PsiType sneakedExceptionType : sneakedExceptionTypes) {
