@@ -2,19 +2,19 @@ package de.plushnikov.builder.simple;
 
 public class BuilderAtConstructorSimplePredefined {
     private int myInt;
-    private String myString2;
+    private String myString;
 
     @lombok.Builder
-    public BuilderAtConstructorSimplePredefined(int myInt, String myString2) {
+    public BuilderAtConstructorSimplePredefined(int myInt, String myString) {
         this.myInt = myInt + 1;
-        this.myString = myString2;
+        this.myString = myString;
     }
 
     static class BuilderAtConstructorSimplePredefinedBuilder {
         private int myInt;
 
-        public BuilderAtConstructorSimplePredefined.BuilderAtConstructorSimplePredefinedBuilder myString2(String myString) {
-            this.myString2 = myString + "something";
+        public BuilderAtConstructorSimplePredefined.BuilderAtConstructorSimplePredefinedBuilder myString(String myString) {
+            this.myString = myString + "something";
             return this;
         }
     }

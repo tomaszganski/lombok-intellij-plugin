@@ -326,7 +326,8 @@ public class BuilderHandler {
 
       fields.add(new LombokLightFieldBuilder(psiManager, accessorsInfo.removePrefix(psiField.getName()), psiField.getType())
           .withModifier(PsiModifier.PRIVATE)
-          .withNavigationElement(psiField));
+          .withNavigationElement(psiField)
+          .withContainingFile(psiClass.getContainingFile()));
     }
     return fields;
   }
