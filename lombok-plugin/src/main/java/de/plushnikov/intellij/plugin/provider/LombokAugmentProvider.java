@@ -58,13 +58,6 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
     if (!(type.isAssignableFrom(PsiMethod.class) || type.isAssignableFrom(PsiField.class) || type.isAssignableFrom(PsiClass.class))) {
       return emptyResult;
     }
-
-    final AugmentCallData currentAugmentData = new AugmentCallData(element, type);
-    if (recursionBreaker.get().contains(currentAugmentData)) {
-      log.debug("Prevented recursion call");
-      return emptyResult;
-    }
-
     // skip processing during index rebuild
     final Project project = element.getProject();
     if (DumbService.getInstance(project).isDumb()) {
@@ -77,22 +70,25 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
 
     initRegisteredAnnotations();
 
+    final AugmentCallData currentAugmentData = new AugmentCallData(element, type);
+    if (recursionBreaker.get().contains(currentAugmentData)) {
+      log.debug("Prevented recursion call");
+      return emptyResult;
+    }
+
     recursionBreaker.get().add(currentAugmentData);
     try {
       final PsiClass psiClass = (PsiClass) element;
 
       final boolean isLombokPresent = UserMapKeys.isLombokPossiblePresent(element);
-      if (!isLombokPresent) {
-        if (log.isDebugEnabled()) {
-          log.debug(String.format("Skipped call for type: %s class: %s", type, psiClass.getQualifiedName()));
-        }
-        return emptyResult;
+      if (isLombokPresent) {
+        return process(type, project, psiClass);
       }
-
-      return process(type, project, psiClass);
     } finally {
       recursionBreaker.get().remove(currentAugmentData);
     }
+
+    return emptyResult;
   }
 
   private void initRegisteredAnnotations() {
@@ -149,6 +145,10 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
       if (PsiAnnotationUtil.checkAnnotationsSimpleNameExistsIn(psiMethod, registeredAnnotationNames)) {
         return true;
       }
+    }
+    final PsiElement psiClassParent = psiClass.getParent();
+    if (psiClassParent instanceof PsiClass) {
+      return verifyLombokPresent((PsiClass) psiClassParent);
     }
 
     return false;
