@@ -14,8 +14,8 @@ public class BuilderAtMethodSimple {
     System.out.println(builderSimple);
   }
 
-  public static BuilderAtMethodSimpleBuilder builder() {
-    return new BuilderAtMethodSimpleBuilder();
+  public static BuilderAtMethodSimple.BuilderAtMethodSimpleBuilder builder() {
+    return new BuilderAtMethodSimple.BuilderAtMethodSimpleBuilder();
   }
 
   public static class BuilderAtMethodSimpleBuilder {

@@ -9,8 +9,8 @@ public class BuilderAtMethodSimplePredefined {
     return result;
   }
 
-  public static BuilderAtMethodSimplePredefinedBuilder builder() {
-    return new BuilderAtMethodSimplePredefinedBuilder();
+  public static BuilderAtMethodSimplePredefined.BuilderAtMethodSimplePredefinedBuilder builder() {
+    return new BuilderAtMethodSimplePredefined.BuilderAtMethodSimplePredefinedBuilder();
   }
 
   static class BuilderAtMethodSimplePredefinedBuilder {
@@ -25,7 +25,7 @@ public class BuilderAtMethodSimplePredefined {
       return this;
     }
 
-    public BuilderAtMethodSimplePredefinedBuilder myInt(int myInt) {
+    public BuilderAtMethodSimplePredefined.BuilderAtMethodSimplePredefinedBuilder myInt(int myInt) {
       this.myInt = myInt;
       return this;
     }

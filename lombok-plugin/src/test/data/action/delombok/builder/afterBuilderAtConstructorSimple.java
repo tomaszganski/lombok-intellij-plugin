@@ -12,8 +12,8 @@ public class BuilderAtConstructorSimple {
     System.out.println(builderSimple);
   }
 
-  public static BuilderAtConstructorSimpleBuilder builder() {
-    return new BuilderAtConstructorSimpleBuilder();
+  public static BuilderAtConstructorSimple.BuilderAtConstructorSimpleBuilder builder() {
+    return new BuilderAtConstructorSimple.BuilderAtConstructorSimpleBuilder();
   }
 
   public static class BuilderAtConstructorSimpleBuilder {

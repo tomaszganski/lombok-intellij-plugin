@@ -8,8 +8,8 @@ public class BuilderSimplePreDefined {
     this.myString = myString;
   }
 
-  public static BuilderSimplePreDefinedBuilder builder() {
-    return new BuilderSimplePreDefinedBuilder();
+  public static BuilderSimplePreDefined.BuilderSimplePreDefinedBuilder builder() {
+    return new BuilderSimplePreDefined.BuilderSimplePreDefinedBuilder();
   }
 
   static class BuilderSimplePreDefinedBuilder {
@@ -24,7 +24,7 @@ public class BuilderSimplePreDefined {
       return this;
     }
 
-    public BuilderSimplePreDefinedBuilder myInt(int myInt) {
+    public BuilderSimplePreDefined.BuilderSimplePreDefinedBuilder myInt(int myInt) {
       this.myInt = myInt;
       return this;
     }

@@ -13,8 +13,8 @@ public class BuilderSimple {
     System.out.println(builderSimple);
   }
 
-  public static BuilderSimpleBuilder builder() {
-    return new BuilderSimpleBuilder();
+  public static BuilderSimple.BuilderSimpleBuilder builder() {
+    return new BuilderSimple.BuilderSimpleBuilder();
   }
 
   public static class BuilderSimpleBuilder {
