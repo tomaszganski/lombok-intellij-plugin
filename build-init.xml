@@ -1,6 +1,6 @@
 <project name="Lombok IntelliJIdea Plugin" default="init" basedir=".">
-  <property name="ideaVersion" value="12.1.7"/>
-  <property name="ideaBuildVersion" value="129.1521"/>
+  <property name="ideaVersion" value="12.1.7b"/>
+  <property name="ideaBuildVersion" value="129.1525"/>
 
   <target name="init">
     <tstamp/>
