@@ -3,6 +3,7 @@ package de.plushnikov.intellij.plugin.psi;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiType;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class LombokLightFieldBuilder extends LightFieldBuilder {
   protected String myName;
   protected final LombokLightIdentifier myNameIdentifier;
+  protected PsiFile myContainingFile;
 
   public LombokLightFieldBuilder(@NotNull PsiManager manager, @NotNull String name, @NotNull PsiType type) {
     super(manager, name, type);
@@ -33,6 +35,11 @@ public class LombokLightFieldBuilder extends LightFieldBuilder {
     return this;
   }
 
+  public LombokLightFieldBuilder withContainingFile(PsiFile psiFile) {
+    myContainingFile = psiFile;
+    return this;
+  }
+  
   public LombokLightFieldBuilder withModifier( @NotNull @NonNls String modifier) {
     ((LightModifierList) getModifierList()).addModifier(modifier);
     return this;
@@ -54,6 +61,11 @@ public class LombokLightFieldBuilder extends LightFieldBuilder {
     myName = name;
     myNameIdentifier.setText(myName);
     return this;
+  }
+
+  @Override
+  public PsiFile getContainingFile() {
+    return myContainingFile;
   }
 
   @NotNull
