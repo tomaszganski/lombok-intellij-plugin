@@ -28,6 +28,8 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="de.plushnikov.intellij.plugin.settings.LombokSettings"/>
+
     <lang.psiAugmentProvider implementation="de.plushnikov.intellij.plugin.provider.LombokAugmentProvider"/>
     <implicitUsageProvider implementation="de.plushnikov.intellij.plugin.provider.LombokImplicitUsageProvider"/>
     <inspectionToolProvider implementation="de.plushnikov.intellij.plugin.provider.LombokInspectionProvider"/>
@@ -48,6 +50,11 @@
     <lang.commenter language="Lombok.Config" implementationClass="de.plushnikov.intellij.plugin.language.LombokConfigCommentor"/>
 
 		<fileBasedIndex implementation="de.plushnikov.intellij.plugin.lombokconfig.LombokConfigIndex"/>
+
+		<custom.exception.handler implementation="de.plushnikov.intellij.plugin.handler.SneakyThrowsExceptionHandler"/>
+
+    <findUsagesHandlerFactory implementation="de.plushnikov.intellij.plugin.extension.LombokFieldFindUsagesHandlerFactory"/>
+    <renamePsiElementProcessor implementation="de.plushnikov.intellij.plugin.extension.LombokRenameFieldReferenceProcessor"/>
   </extensions>
 
   <extensions defaultExtensionNs="Lombook Plugin">
@@ -78,8 +85,8 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderExperimentalClassProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.builder.BuilderExperimentalProcessor"/>
 
-		<processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueProcessor"/>
-		<processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueExperimentalProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.clazz.ValueExperimentalProcessor"/>
 
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.DelegateFieldProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.field.DelegateExperimentalFieldProcessor"/>
@@ -90,10 +97,10 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.DelegateMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.DelegateExperimentalMethodProcessor"/>
 
-		<processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderClassMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderMethodProcessor"/>
-		<processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalClassMethodProcessor"/>
-		<processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalMethodProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalClassMethodProcessor"/>
+    <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalMethodProcessor"/>
 
     <!-- lombok-pg-->
     <processor implementation="de.plushnikov.intellij.plugin.processor_pg.clazz.FluentSetterProcessor"/>
@@ -197,9 +204,14 @@
 		<ul>
 		  <li>0.9.2
 				<ol>
+				    <li>Added #9:  Basic val support in IntelliJ 14.1</li>
 				    <li>Fixed #81: @Builder: buildMethod should have same throws-list as annotated static method</li>
 				    <li>Fixed #82: Abstract Class + @Delegate</li>
 				    <li>Fixed #83: Getting inconvertible types error assigning new builder instance</li>
+				    <li>Fixed #84: Properly find usages of @Getters & @Setters on fields with @Acccessor prefixes</li>
+				    <li>Fixed #90: Renaming a field with different case doesn't rename getter</li>
+				    <li>Fixed #92: Improved @Wither support</li>
+				    <li>Fixed #93: IntelliJ unable to resolve constructor when using @Builder and @Value together</li>
 				</ol>
 			</li>
 		  <li>0.9.1

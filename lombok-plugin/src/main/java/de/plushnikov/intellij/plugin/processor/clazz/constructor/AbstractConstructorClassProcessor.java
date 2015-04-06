@@ -13,7 +13,6 @@ import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeParameter;
 import com.intellij.util.StringBuilderSpinAllocator;
-import de.plushnikov.intellij.plugin.extension.UserMapKeys;
 import de.plushnikov.intellij.plugin.lombokconfig.ConfigKeys;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.processor.clazz.AbstractClassProcessor;
@@ -125,6 +124,7 @@ public abstract class AbstractConstructorClassProcessor extends AbstractClassPro
   }
 
   @NotNull
+  @SuppressWarnings("deprecation")
   protected Collection<PsiField> getAllNotInitializedAndNotStaticFields(@NotNull PsiClass psiClass) {
     Collection<PsiField> allNotInitializedNotStaticFields = new ArrayList<PsiField>();
     final boolean classAnnotatedWithValue = PsiAnnotationUtil.isAnnotatedWith(psiClass, Value.class, lombok.experimental.Value.class);
@@ -209,7 +209,6 @@ public abstract class AbstractConstructorClassProcessor extends AbstractClassPro
     }
 
     for (PsiField param : params) {
-      UserMapKeys.addWriteUsageFor(param);
       constructor.withParameter(accessorsInfo.removePrefix(param.getName()), param.getType());
     }
 
@@ -230,7 +229,6 @@ public abstract class AbstractConstructorClassProcessor extends AbstractClassPro
         .withModifier(PsiModifier.PUBLIC, PsiModifier.STATIC);
 
     for (PsiField param : params) {
-      UserMapKeys.addWriteUsageFor(param);
       method.withParameter(param.getName(), param.getType());
     }
 
