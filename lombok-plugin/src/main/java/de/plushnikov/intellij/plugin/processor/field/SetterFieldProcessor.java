@@ -10,7 +10,6 @@ import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiType;
-import de.plushnikov.intellij.plugin.extension.UserMapKeys;
 import de.plushnikov.intellij.plugin.problem.ProblemBuilder;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import de.plushnikov.intellij.plugin.quickfix.PsiQuickFixFactory;
@@ -119,7 +118,12 @@ public class SetterFieldProcessor extends AbstractFieldProcessor {
   protected String getSetterName(@NotNull PsiField psiField, boolean isBoolean) {
     final AccessorsInfo accessorsInfo = AccessorsInfo.build(psiField);
 
-    final String fieldNameWithoutPrefix = accessorsInfo.removePrefix(psiField.getName());
+    final String psiFieldName = psiField.getName();
+    return getSetterName(accessorsInfo, psiFieldName, isBoolean);
+  }
+
+  public String getSetterName(AccessorsInfo accessorsInfo, String psiFieldName, boolean isBoolean) {
+    final String fieldNameWithoutPrefix = accessorsInfo.removePrefix(psiFieldName);
     if (accessorsInfo.isFluent()) {
       return LombokUtils.decapitalize(fieldNameWithoutPrefix);
     }
@@ -132,8 +136,6 @@ public class SetterFieldProcessor extends AbstractFieldProcessor {
     final PsiType psiFieldType = psiField.getType();
 
     final String methodName = getSetterName(psiField, PsiType.BOOLEAN.equals(psiFieldType));
-
-    UserMapKeys.addWriteUsageFor(psiField);
 
     PsiType returnType = getReturnType(psiField);
     LombokLightMethodBuilder method = new LombokLightMethodBuilder(psiField.getManager(), methodName)
