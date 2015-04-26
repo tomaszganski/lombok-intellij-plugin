@@ -35,7 +35,7 @@ import java.util.Set;
  * target platform (e.g. useful for both javac and Eclipse lombok implementations).
  */
 public class LombokHandlerUtil {
-	/**
+  /**
    * Given the name of a field, return the 'base name' of that field. For example, {@code fFoobar} becomes {@code foobar} if {@code f} is in the prefix list.
    * For prefixes that end in a letter character, the next character must be a non-lowercase character (i.e. {@code hashCode} is not {@code ashCode} even if
    * {@code h} is in the prefix list, but {@code hAshcode} would become {@code ashCode}). The first prefix that matches is used. If the prefix list is empty,
@@ -48,32 +48,32 @@ public class LombokHandlerUtil {
    * @return The base name of the field.
    */
   public static CharSequence removePrefix(CharSequence fieldName, List<String> prefixes) {
-		if (prefixes == null || prefixes.isEmpty()) {
-			return fieldName;
-		}
+    if (prefixes == null || prefixes.isEmpty()) {
+      return fieldName;
+    }
 
     fieldName = fieldName.toString();
 
     outer:
     for (String prefix : prefixes) {
-			if (prefix.length() == 0) {
-				return fieldName;
-			}
-			if (fieldName.length() <= prefix.length()) {
-				continue outer;
-			}
+      if (prefix.length() == 0) {
+        return fieldName;
+      }
+      if (fieldName.length() <= prefix.length()) {
+        continue outer;
+      }
       for (int i = 0; i < prefix.length(); i++) {
-				if (fieldName.charAt(i) != prefix.charAt(i)) {
-					continue outer;
-				}
+        if (fieldName.charAt(i) != prefix.charAt(i)) {
+          continue outer;
+        }
       }
       char followupChar = fieldName.charAt(prefix.length());
       // if prefix is a letter then follow up letter needs to not be lowercase, i.e. 'foo' is not a match
       // as field named 'oo' with prefix 'f', but 'fOo' would be.
-			if (Character.isLetter(prefix.charAt(prefix.length() - 1)) &&
-					Character.isLowerCase(followupChar)) {
-				continue outer;
-			}
+      if (Character.isLetter(prefix.charAt(prefix.length() - 1)) &&
+          Character.isLowerCase(followupChar)) {
+        continue outer;
+      }
       return "" + Character.toLowerCase(followupChar) + fieldName.subSequence(prefix.length() + 1, fieldName.length());
     }
 
@@ -156,13 +156,13 @@ public class LombokHandlerUtil {
                                        String booleanPrefix, String normalPrefix, boolean adhereToFluent) {
 
     fieldName = fieldName.toString();
-		if (fieldName.length() == 0) {
-			return null;
-		}
+    if (fieldName.length() == 0) {
+      return null;
+    }
 
-		if (Boolean.TRUE.equals(accessors.isDontUseIsPrefix())) {
-			isBoolean = false;
-		}
+    if (Boolean.TRUE.equals(accessors.isDontUseIsPrefix())) {
+      isBoolean = false;
+    }
     boolean explicitPrefix = accessors != null && false;//accessors.isExplicit("prefix");
     boolean explicitFluent = accessors != null && accessors.isFluent();//accessors.isExplicit("fluent");
 
@@ -170,14 +170,14 @@ public class LombokHandlerUtil {
     boolean fluent = explicitFluent ? accessors.isFluent() : Boolean.TRUE.equals(null);
 
     fieldName = removePrefix(fieldName, prefix);
-		if (fieldName == null) {
-			return null;
-		}
+    if (fieldName == null) {
+      return null;
+    }
 
     String fName = fieldName.toString();
-		if (adhereToFluent && fluent) {
-			return fName;
-		}
+    if (adhereToFluent && fluent) {
+      return fName;
+    }
 
     if (isBoolean && fName.startsWith("is") && fieldName.length() > 2 && !Character.isLowerCase(fieldName.charAt(2))) {
       // The field is for example named 'isRunning'.
@@ -232,9 +232,9 @@ public class LombokHandlerUtil {
   private static List<String> toAllAccessorNames(AccessorsInfo accessors, CharSequence fieldName, boolean isBoolean,
                                                  String booleanPrefix, String normalPrefix, boolean adhereToFluent) {
 
-		if (Boolean.TRUE.equals(accessors.isDontUseIsPrefix())) {
-			isBoolean = false;
-		}
+    if (Boolean.TRUE.equals(accessors.isDontUseIsPrefix())) {
+      isBoolean = false;
+    }
     if (!isBoolean) {
       String accessorName = toAccessorName(accessors, fieldName, false, booleanPrefix, normalPrefix, adhereToFluent);
       return (accessorName == null) ? Collections.<String>emptyList() : Collections.singletonList(accessorName);
@@ -248,9 +248,9 @@ public class LombokHandlerUtil {
     boolean fluent = explicitFluent ? accessors.isFluent() : Boolean.TRUE.equals(null);
 
     fieldName = removePrefix(fieldName, prefix);
-		if (fieldName == null) {
-			return Collections.emptyList();
-		}
+    if (fieldName == null) {
+      return Collections.emptyList();
+    }
 
     List<String> baseNames = toBaseNames(fieldName, isBoolean, fluent);
 
@@ -260,9 +260,9 @@ public class LombokHandlerUtil {
         names.add(baseName);
       } else {
         names.add(buildAccessorName(normalPrefix, baseName));
-				if (!normalPrefix.equals(booleanPrefix)) {
-					names.add(buildAccessorName(booleanPrefix, baseName));
-				}
+        if (!normalPrefix.equals(booleanPrefix)) {
+          names.add(buildAccessorName(booleanPrefix, baseName));
+        }
       }
     }
 
@@ -294,12 +294,12 @@ public class LombokHandlerUtil {
    * @return prefix + smartly title-cased suffix. For example, {@code setRunning}.
    */
   public static String buildAccessorName(String prefix, String suffix) {
-		if (suffix.length() == 0) {
-			return prefix;
-		}
-		if (prefix.length() == 0) {
-			return suffix;
-		}
+    if (suffix.length() == 0) {
+      return prefix;
+    }
+    if (prefix.length() == 0) {
+      return suffix;
+    }
 
     char first = suffix.charAt(0);
     if (Character.isLowerCase(first)) {
