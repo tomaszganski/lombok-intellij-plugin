@@ -3,7 +3,7 @@
   <id>Lombook Plugin</id>
   <name>Lombok Plugin</name>
   <vendor url="https://github.com/mplushnikov/lombok-intellij-plugin" email="lombokplugin@plushnikov.de">Michail Plushnikov</vendor>
-	<version>0.9.3</version>
+	<version>0.9.4.14</version>
 
   <idea-version since-build="133.00" until-build="137.9999"/>
 
@@ -200,6 +200,11 @@
   <!--TODO @Builder is not supported on constructors with constructor type parameters..-->
   <change-notes><![CDATA[
 		<ul>
+		<li>0.9.4
+				<ol>
+				    <li>Fixed regression #108: Getter/Setter wrong after last Update</li>
+				</ol>
+			</li>
 		<li>0.9.3
 				<ol>
 				    <li>Fixed #95: Fluent Setter Override Error</li>
