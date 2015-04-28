@@ -68,25 +68,33 @@ public class LombokInspection extends BaseJavaLocalInspectionTool {
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, final boolean isOnTheFly) {
-    return new JavaElementVisitor() {
+    return new LombokElementVisitor(holder);
+  }
 
-      @Override
-      public void visitAnnotation(PsiAnnotation annotation) {
-        super.visitAnnotation(annotation);
+  private class LombokElementVisitor extends JavaElementVisitor {
 
-        final String qualifiedName = annotation.getQualifiedName();
-        if (StringUtils.isNotBlank(qualifiedName) && allProblemHandlers.containsKey(qualifiedName)) {
-          final Collection<LombokProblem> problems = new HashSet<LombokProblem>();
+    private final ProblemsHolder holder;
 
-          for (Processor inspector : allProblemHandlers.get(qualifiedName)) {
-            problems.addAll(inspector.verifyAnnotation(annotation));
-          }
+    public LombokElementVisitor(ProblemsHolder holder) {
+      this.holder = holder;
+    }
 
-          for (LombokProblem problem : problems) {
-            holder.registerProblem(annotation, problem.getMessage(), problem.getHighlightType(), problem.getQuickFixes());
-          }
+    @Override
+    public void visitAnnotation(PsiAnnotation annotation) {
+      super.visitAnnotation(annotation);
+
+      final String qualifiedName = annotation.getQualifiedName();
+      if (StringUtils.isNotBlank(qualifiedName) && allProblemHandlers.containsKey(qualifiedName)) {
+        final Collection<LombokProblem> problems = new HashSet<LombokProblem>();
+
+        for (Processor inspector : allProblemHandlers.get(qualifiedName)) {
+          problems.addAll(inspector.verifyAnnotation(annotation));
+        }
+
+        for (LombokProblem problem : problems) {
+          holder.registerProblem(annotation, problem.getMessage(), problem.getHighlightType(), problem.getQuickFixes());
         }
       }
-    };
+    }
   }
 }
