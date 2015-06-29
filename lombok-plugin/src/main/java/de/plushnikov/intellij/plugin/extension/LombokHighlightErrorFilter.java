@@ -26,7 +26,7 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   @Override
   public boolean accept(@NotNull HighlightInfo highlightInfo, @Nullable PsiFile file) {
     if (null != file && HighlightSeverity.ERROR.equals(highlightInfo.getSeverity())) {
-
+      final String description = highlightInfo.getDescription();
       // Handling SneakyThrows
       if (HighlightInfoType.UNHANDLED_EXCEPTION.equals(highlightInfo.type) && unhandledException(description)) {
         final String unhandledExceptions = description.substring(description.indexOf(':') + 1).trim();
@@ -39,7 +39,7 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
         }
       }
       // Handling LazyGetter
-      if (uninitializedField(highlightInfo.getDescription()) && LazyGetterHandler.isLazyGetterHandled(highlightInfo, file)) {
+      if (uninitializedField(description) && LazyGetterHandler.isLazyGetterHandled(highlightInfo, file)) {
         return false;
       }
     }
