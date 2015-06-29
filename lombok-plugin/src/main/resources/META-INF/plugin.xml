@@ -3,7 +3,7 @@
   <id>Lombook Plugin</id>
   <name>Lombok Plugin</name>
   <vendor url="https://github.com/mplushnikov/lombok-intellij-plugin" email="lombokplugin@plushnikov.de">Michail Plushnikov</vendor>
-	<version>0.9.4.13</version>
+	<version>0.9.5.13</version>
 
   <idea-version since-build="133.00" until-build="137.9999"/>
 
@@ -53,6 +53,8 @@
 
     <findUsagesHandlerFactory implementation="de.plushnikov.intellij.plugin.extension.LombokFieldFindUsagesHandlerFactory"/>
     <renamePsiElementProcessor implementation="de.plushnikov.intellij.plugin.extension.LombokRenameFieldReferenceProcessor"/>
+
+		<java.elementFinder implementation="de.plushnikov.intellij.plugin.extension.LombokElementFinder" order="last"/>
   </extensions>
 
   <extensions defaultExtensionNs="Lombook Plugin">
@@ -100,13 +102,9 @@
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalClassMethodProcessor"/>
     <processor implementation="de.plushnikov.intellij.plugin.processor.method.BuilderExperimentalMethodProcessor"/>
 
-    <!-- lombok-pg-->
-    <processor implementation="de.plushnikov.intellij.plugin.processor_pg.clazz.FluentSetterProcessor"/>
-    <processor implementation="de.plushnikov.intellij.plugin.processor_pg.clazz.SingletonProcessor"/>
-
-    <processor implementation="de.plushnikov.intellij.plugin.processor_pg.field.EnumIdFieldProcessor"/>
-    <processor implementation="de.plushnikov.intellij.plugin.processor_pg.field.LazyGetterFieldProcessor"/>
-    <processor implementation="de.plushnikov.intellij.plugin.processor_pg.field.FluentSetterFieldProcessor"/>
+    <!-- hrisey -->
+    <processor implementation="pl.mg6.hrisey.intellij.plugin.processor.clazz.ParcelableMethodsProcessor"/>
+    <processor implementation="pl.mg6.hrisey.intellij.plugin.processor.clazz.ParcelableFieldsProcessor"/>
   </extensions>
 
   <actions>
@@ -200,6 +198,16 @@
   <!--TODO @Builder is not supported on constructors with constructor type parameters..-->
   <change-notes><![CDATA[
 		<ul>
+		<li>0.9.5
+				<ol>
+				    <li>Fixed #48: Importing @Builder generated builder classes does not work</li>
+				    <li>Added #77: Basic Support for new @Singular annotation for @Builder collection fields</li>
+				    <li>Fixed #111: @Builder on constructors/methods is not recognized in Android Studio</li>
+				    <li>Fixed #116: @Builder - Builder class can't be found without a static import</li>
+				    <li>Added Hrisey @Parcelable support patch</li>
+				    <li>Dropped outdated support for some lombok_pg annotations</li>
+				</ol>
+			</li>
 		<li>0.9.4
 				<ol>
 				    <li>Fixed regression #108: Getter/Setter wrong after last Update</li>

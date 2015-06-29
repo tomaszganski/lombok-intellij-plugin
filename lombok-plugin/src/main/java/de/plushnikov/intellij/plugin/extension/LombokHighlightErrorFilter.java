@@ -13,7 +13,6 @@ import de.plushnikov.intellij.plugin.handler.SneakyThrowsExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LombokHighlightErrorFilter implements HighlightInfoFilter {
@@ -27,7 +26,6 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   @Override
   public boolean accept(@NotNull HighlightInfo highlightInfo, @Nullable PsiFile file) {
     if (null != file && HighlightSeverity.ERROR.equals(highlightInfo.getSeverity())) {
-      final String description = StringUtil.notNullize(highlightInfo.getDescription());
 
       // Handling SneakyThrows
       if (HighlightInfoType.UNHANDLED_EXCEPTION.equals(highlightInfo.type) && unhandledException(description)) {
@@ -41,7 +39,7 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
         }
       }
       // Handling LazyGetter
-      if (uninitializedField(description) && LazyGetterHandler.isLazyGetterHandled(highlightInfo, file)) {
+      if (uninitializedField(highlightInfo.getDescription()) && LazyGetterHandler.isLazyGetterHandled(highlightInfo, file)) {
         return false;
       }
     }
@@ -55,7 +53,6 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   }
 
   private boolean uninitializedField(String description) {
-    Matcher matcher = UNINITIALIZED_MESSAGE.matcher(description);
-    return matcher.matches();
+    return UNINITIALIZED_MESSAGE.matcher(StringUtil.notNullize(description)).matches();
   }
 }
