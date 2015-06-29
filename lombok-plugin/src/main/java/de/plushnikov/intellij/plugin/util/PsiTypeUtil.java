@@ -37,7 +37,7 @@ public class PsiTypeUtil {
 
     final PsiTypeParameter[] typeParameters = psiClass.getTypeParameters();
 
-    final PsiType[] psiTypes = PsiType.createArray(typeParameters.length);
+    final PsiType[] psiTypes = new PsiType[typeParameters.length];
     for (int i = 0; i < typeParameters.length; i++) {
       PsiType psiSubstituteKeyType = psiSubstitutor.substitute(typeParameters[i]);
       if (null == psiSubstituteKeyType) {
