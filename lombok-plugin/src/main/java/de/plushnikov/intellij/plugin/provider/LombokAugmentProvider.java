@@ -11,6 +11,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.augment.PsiAugmentProvider;
+import com.intellij.psi.impl.source.PsiExtensibleClass;
 import de.plushnikov.intellij.plugin.extension.LombokProcessorExtensionPoint;
 import de.plushnikov.intellij.plugin.extension.UserMapKeys;
 import de.plushnikov.intellij.plugin.processor.Processor;
@@ -25,7 +26,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Provides support for lombok generated elements
@@ -34,13 +34,6 @@ import java.util.Set;
  */
 public class LombokAugmentProvider extends PsiAugmentProvider {
   private static final Logger log = Logger.getInstance(LombokAugmentProvider.class.getName());
-
-  private final static ThreadLocal<Set<AugmentCallData>> recursionBreaker = new ThreadLocal<Set<AugmentCallData>>() {
-    @Override
-    protected Set<AugmentCallData> initialValue() {
-      return new HashSet<AugmentCallData>();
-    }
-  };
 
   private Collection<String> registeredAnnotationNames;
 
@@ -59,11 +52,11 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
     }
     // Expecting that we are only augmenting an PsiClass
     // Don't filter !isPhysical elements or code auto completion will not work
-    if (!(element instanceof PsiClass) || !element.isValid()) {
+    if (!(element instanceof PsiExtensibleClass) || !element.isValid()) {
       return emptyResult;
     }
     // skip processing for other as supported types
-    if (!(type.isAssignableFrom(PsiMethod.class) || type.isAssignableFrom(PsiField.class) || type.isAssignableFrom(PsiClass.class))) {
+    if (type != PsiMethod.class && type != PsiField.class && type != PsiClass.class) {
       return emptyResult;
     }
     // skip processing if plugin is disabled
@@ -71,32 +64,24 @@ public class LombokAugmentProvider extends PsiAugmentProvider {
       return emptyResult;
     }
 
-    initRegisteredAnnotations();
-
-    final AugmentCallData currentAugmentData = new AugmentCallData(element, type);
-    if (recursionBreaker.get().contains(currentAugmentData)) {
-      log.debug("Prevented recursion call");
+    final PsiFile containingFile = element.getContainingFile();
+    if (containingFile == null) {
       return emptyResult;
     }
 
-    recursionBreaker.get().add(currentAugmentData);
-    try {
-      final PsiClass psiClass = (PsiClass) element;
+    initRegisteredAnnotations();
 
-      boolean fileOpenInEditor = true;
-      final PsiFile containingFile = psiClass.getContainingFile();
-      if (null != containingFile) {
-        final VirtualFile virtualFile = containingFile.getVirtualFile();
-        if (null != virtualFile) {
-          fileOpenInEditor = FileEditorManager.getInstance(project).isFileOpen(virtualFile);
-        }
-      }
+    final PsiClass psiClass = (PsiClass) element;
 
-      if (fileOpenInEditor || checkLombokPresent(psiClass)) {
-        return process(type, project, psiClass);
-      }
-    } finally {
-      recursionBreaker.get().remove(currentAugmentData);
+    boolean fileOpenInEditor = true;
+
+    final VirtualFile virtualFile = containingFile.getVirtualFile();
+    if (null != virtualFile) {
+      fileOpenInEditor = FileEditorManager.getInstance(project).isFileOpen(virtualFile);
+    }
+
+    if (fileOpenInEditor || checkLombokPresent(psiClass)) {
+      return process(type, project, psiClass);
     }
 
     return emptyResult;

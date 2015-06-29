@@ -13,7 +13,6 @@ import de.plushnikov.intellij.plugin.handler.SneakyThrowsExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LombokHighlightErrorFilter implements HighlightInfoFilter {
@@ -55,7 +54,6 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   }
 
   private boolean uninitializedField(String description) {
-    Matcher matcher = UNINITIALIZED_MESSAGE.matcher(description);
-    return matcher.matches();
+    return UNINITIALIZED_MESSAGE.matcher(StringUtil.notNullize(description)).matches();
   }
 }
