@@ -88,7 +88,7 @@ public class SingularMapHandler extends AbstractSingularHandler {
         "{2}";
 
     return MessageFormat.format(codeBlockTemplate, psiFieldName, singularName, fluentBuilder ? "\nreturn this;" : "",
-        psiParameterTypes[0].getCanonicalText(false), psiParameterTypes[1].getCanonicalText(false));
+        psiParameterTypes[0].getCanonicalText(), psiParameterTypes[1].getCanonicalText());
   }
 
   protected String getAllMethodBody(@NotNull String singularName, @NotNull PsiType[] psiParameterTypes, boolean fluentBuilder) {
@@ -101,6 +101,6 @@ public class SingularMapHandler extends AbstractSingularHandler {
         "this.{0}" + LOMBOK_VALUE + ".add($lombokEntry.getValue());\n" +
         "'}'{1}";
     return MessageFormat.format(codeBlockTemplate, singularName, fluentBuilder ? "\nreturn this;" : "",
-        psiParameterTypes[0].getCanonicalText(false), psiParameterTypes[1].getCanonicalText(false));
+        psiParameterTypes[0].getCanonicalText(), psiParameterTypes[1].getCanonicalText());
   }
 }

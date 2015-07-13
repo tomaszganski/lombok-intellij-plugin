@@ -34,8 +34,8 @@ public class OnXAnnotationHandler {
   );
 
   public static boolean isOnXParameterAnnotation(HighlightInfo highlightInfo, PsiFile file) {
-    if (!(ANNOTATION_TYPE_EXPECTED.equals(highlightInfo.getDescription())
-        || CANNOT_RESOLVE_UNDERSCORES_MESSAGE.matcher(StringUtil.notNullize(highlightInfo.getDescription())).matches())) {
+    if (!(ANNOTATION_TYPE_EXPECTED.equals(highlightInfo.description)
+        || CANNOT_RESOLVE_UNDERSCORES_MESSAGE.matcher(StringUtil.notNullize(highlightInfo.description)).matches())) {
       return false;
     }
     
@@ -56,7 +56,7 @@ public class OnXAnnotationHandler {
   }
   
   public static boolean isOnXParameterValue(HighlightInfo highlightInfo, PsiFile file) {
-    if (!CANNOT_FIND_METHOD_VALUE_MESSAGE.equals(highlightInfo.getDescription())) {
+    if (!CANNOT_FIND_METHOD_VALUE_MESSAGE.equals(highlightInfo.description)) {
       return false;
     }
 
