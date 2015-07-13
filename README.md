@@ -7,13 +7,13 @@ lombok-intellij-plugin [![Build Status](https://travis-ci.org/mplushnikov/lombok
 
 Provides support for lombok annotations to write great Java code with IntelliJ IDEA.
 
-**Last version (0.9.4) released on 29.04.2015**
+**Last version (0.9.5) released on 01.07.2015**
 
 Twelfth version of plugin released. Bugfixes and initial support for some cool lombok and delombok refactoring actions with Intellij!
 
 Install it automatically from IntelliJ Idea plugin repository.
 
-Tested and supports IntelliJ versions: 12.1.7, 13.1.6, and 14.1.2  
+Tested and supports IntelliJ versions: 12.1.7, 13.1.6, and 14.1.4  
 
 Support for IntelliJ 11.1.5 by plugin version 0.9.1
 
@@ -51,6 +51,15 @@ Installation
   
 Restart IDE.
 
+IntelliJ and Eclipse compiler
+-----------------------------
+If you're using Eclipse compiler with lombok, try this setup:
+- install plugin
+- change compiler setting:
+  - <kbd>...</kbd> > <kbd>Compiler</kbd> > <kbd>Java Compiler</kbd> > <kbd>Use Compiler: Eclipse</kbd>
+  - <kbd>...</kbd> > <kbd>Compiler</kbd> > <kbd>Annotation Processors</kbd> > <kbd>Enable annotation processing: checked (default configuration)</kbd>
+  - <kbd>...</kbd> > <kbd>Compiler</kbd> > <kbd>Additional build process VM options: -javaagent:lombok.jar</kbd>
+
 Developed By
 ------------
 [**@mplushnikov** Michail Plushnikov] (https://github.com/mplushnikov)
@@ -62,6 +71,7 @@ Developed By
 - [**@mlueders** Mike Lueders](https://github.com/mlueders)
 - [**@mg6maciej** Maciej Górski](https://github.com/mg6maciej)
 - [**@siosio** siosio](https://github.com/siosio)
+- [**@Siriah** Iris Hupkens](https://github.com/Siriah)
 
 
 License

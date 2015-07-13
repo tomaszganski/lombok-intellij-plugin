@@ -10,6 +10,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import de.plushnikov.intellij.plugin.handler.LazyGetterHandler;
 import de.plushnikov.intellij.plugin.handler.SneakyThrowsExceptionHandler;
+import de.plushnikov.intellij.plugin.handler.OnXAnnotationHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   private static final String UNHANDLED_AUTOCLOSABLE_EXCEPTIONS_PREFIX_TEXT = "Unhandled exception from auto-closeable resource:";
 
   private static final Pattern UNINITIALIZED_MESSAGE = Pattern.compile("Variable '.+' might not have been initialized");
+  private static final Pattern LOMBOK_ANYANNOTATIONREQUIRED = Pattern.compile("Incompatible types\\. Found: '__*', required: 'lombok.*AnyAnnotation\\[\\]'");
 
   @Override
   public boolean accept(@NotNull HighlightInfo highlightInfo, @Nullable PsiFile file) {
@@ -42,6 +44,13 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
       if (uninitializedField(description) && LazyGetterHandler.isLazyGetterHandled(highlightInfo, file)) {
         return false;
       }
+      
+      //Handling onX parameters
+      if (OnXAnnotationHandler.isOnXParameterAnnotation(highlightInfo, file)
+          || OnXAnnotationHandler.isOnXParameterValue(highlightInfo, file)
+          || LOMBOK_ANYANNOTATIONREQUIRED.matcher(description).matches()) {
+        return false;
+      }
     }
     return true;
   }
@@ -53,6 +62,6 @@ public class LombokHighlightErrorFilter implements HighlightInfoFilter {
   }
 
   private boolean uninitializedField(String description) {
-    return UNINITIALIZED_MESSAGE.matcher(StringUtil.notNullize(description)).matches();
+    return UNINITIALIZED_MESSAGE.matcher(description).matches();
   }
 }
